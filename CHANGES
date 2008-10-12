@@ -1,0 +1,6 @@
+
+ * Mapping[...] now an alias for Mapping.new
+ * Rakefile can take version from environment variable
+
+0.1.0
+ * Initial release
