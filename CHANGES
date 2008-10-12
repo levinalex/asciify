@@ -1,4 +1,5 @@
-
+0.2.0
+ * asciify lives at github now
  * Mapping[...] now an alias for Mapping.new
  * Rakefile can take version from environment variable
 
