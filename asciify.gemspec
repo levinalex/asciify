@@ -8,4 +8,6 @@ spec = Gem::Specification.new do |s|
   s.author = "Levin Alexander"
   s.homepage = "http://levinalex.net/src/asciify"
   s.email = "levin@grundeis.net"
+
+  s.add_runtime_dependency 'iconv'
 end
