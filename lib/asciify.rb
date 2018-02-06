@@ -9,6 +9,19 @@ class Asciify
   Intermediate = "UCS-4"
   PackFormat = "N*"
 
+  def self.mapping_config
+    @mapping_config
+  end
+
+  def self.mapping_config=(input)
+    @mapping_config = input
+    @default_mapping = Asciify::Mapping.new(*input)
+  end
+
+  def self.default_mapping
+    @default_mapping
+  end
+
   class Mapping
     class << self
       alias_method :[], :new
@@ -27,7 +40,6 @@ class Asciify
     # If +language+ is a symbol, it refers to a builtin mapping
     #
     def initialize(language = :default, replacement = "?")
-      
       if Symbol === language
         path = "#{File.dirname(__FILE__)}/mappings/#{language}.yaml"
       else
@@ -65,16 +77,21 @@ class Asciify
     end
   end
   
-  def initialize(replacement = "?", target = "ASCII", source = "UTF-8")
+  def initialize(replacement = nil, target = "ASCII", source = "UTF-8")
     @from_input_enc = Iconv.new(Intermediate, source)
     @to_output_enc = Iconv.new(target, Intermediate)
+    replacement ||= self.class.default_mapping
 
-    if String === replacement
-      r = @from_input_enc.iconv(replacement).unpack(PackFormat)
-      @mapping = Hash.new(r)
-    else
+    if replacement.is_a?(Asciify::Mapping)
       @mapping = replacement
+    elsif replacement.is_a?(Symbol)
+      @mapping = Asciify::Mapping.new(replacement)
+    elsif !replacement
+      replacement = '?'
     end
+
+    # By this point we've pretty much ensured either it's a string or the mapping is already set.
+    @mapping ||= Hash.new(@from_input_enc.iconv(replacement).unpack(PackFormat))
   end
 
   def convert(str)

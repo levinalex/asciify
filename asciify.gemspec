@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'asciify'
-  s.version = "0.2.0"
+  s.version = "0.3.0"
   s.summary = "strip non-ASCII characters from a string and replace them with something else"
   s.files = Dir['lib/**/*']
   s.require_path = 'lib'
